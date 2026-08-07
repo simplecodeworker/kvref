@@ -122,6 +122,7 @@
                     <li><a href="#sample-multi-image" class="nav-link block px-2 py-1.5 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm text-brand-400">Multi-Image Grid</a></li>
                     <li><a href="#sample-decorative-shapes" class="nav-link block px-2 py-1.5 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm text-brand-400">Decorative Shapes</a></li>
                     <li><a href="#sample-code-snippet" class="nav-link block px-2 py-1.5 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm text-brand-400">Code Snippets Layout</a></li>
+                    <li><a href="#sample-multi-level" class="nav-link block px-2 py-1.5 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm text-brand-400">Multi-Level Hierarchy</a></li>
                 </ul>
             </div>
         </nav>
@@ -143,7 +144,7 @@
                 </div>
                 <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-4 tracking-tight">Layout Architecture Guide</h2>
                 <p class="text-lg text-slate-600 leading-relaxed max-w-3xl">
-                    The KV Renderer translates an abstract JSON schema into a high-fidelity, coordinate-based canvas. It supports dynamic text mapping, arbitrary shapes, multiple images, and direct exports to PNG or WebP.
+                    The KV Renderer translates an abstract JSON schema into a high-fidelity, coordinate-based canvas. It supports dynamic text mapping, arbitrary shapes, multiple images, and direct exports to PNG.
                 </p>
             </section>
 
@@ -173,7 +174,48 @@
                             <tr>
                                 <td class="px-6 py-4 font-mono text-brand-600">theme</td>
                                 <td class="px-6 py-4 text-slate-500">Object | string</td>
-                                <td class="px-6 py-4">Defines standard palette (<code>primaryColor</code>, <code>textColor</code>, <code>accentColor</code>). Fallback text/accent colors pull from here.</td>
+                                <td class="px-6 py-4">Defines standard palette (see <strong>Theme Configuration</strong> below).</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="text-lg font-semibold text-slate-900 mb-3 mt-8">Theme Configuration & The Cascade Effect</h4>
+                <p class="text-slate-600 mb-4">
+                    The <code>theme</code> object dictates how elements visually coordinate. By defining these colors at the root, the renderer uses a <strong>cascade effect</strong> to automatically style text, backgrounds, and accents consistently across the layout. You only need to explicitly define colors on individual elements when you want to break the theme.
+                </p>
+                <div class="overflow-hidden rounded-xl border border-slate-200 shadow-sm mb-6">
+                    <table class="min-w-full text-sm text-left bg-white">
+                        <thead class="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
+                            <tr>
+                                <th class="px-6 py-3">Property</th>
+                                <th class="px-6 py-3">Description & Impact</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">primaryColor</td>
+                                <td class="px-6 py-3">The dominant brand color. It serves as a fallback. If <code>accentColor</code> is not defined, the renderer automatically uses this for bullets, numbers, and headers.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">accentColor</td>
+                                <td class="px-6 py-3">The active highlight color. Automatically colors Key Point numbered cards (e.g., "01"), default bullet points, and Table header background fills.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">backgroundColor</td>
+                                <td class="px-6 py-3">Sets the base layer of the presentation slide (can be overridden by the root <code>background</code> string).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">textColor</td>
+                                <td class="px-6 py-3">The default typography color. Applied automatically to <code>title</code>, <code>description</code>, <code>keyPoints</code>, and general table cell text to ensure high contrast.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">codeBackground</td>
+                                <td class="px-6 py-3">A specific background fill isolating <code>codeBlock</code> elements (usually a dark color like charcoal or navy to make syntax pop).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">secondaryColor</td>
+                                <td class="px-6 py-3">Secondary brand color. Available for your custom logic but not strictly enforced by default renderer elements.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -313,9 +355,9 @@
                                 <td class="px-6 py-3">Top-left coordinates of the bounding box.</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-3 font-mono text-brand-600">width</td>
+                                <td class="px-6 py-3 font-mono text-brand-600">width, height</td>
                                 <td class="px-6 py-3 text-slate-500">number</td>
-                                <td class="px-6 py-3">Maximum width before text wraps to a new line.</td>
+                                <td class="px-6 py-3">Bounding box dimensions. <code>width</code> triggers automatic text wrapping.</td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">fontSize, fontFamily</td>
@@ -331,6 +373,11 @@
                                 <td class="px-6 py-3 font-mono text-brand-600">color / fill</td>
                                 <td class="px-6 py-3 text-slate-500">string</td>
                                 <td class="px-6 py-3">Text color (hex code). Both keys map to the fill attribute.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">lineHeight</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Multiplier for spacing between lines of text (e.g., <code>1.4</code> or <code>1.5</code>).</td>
                             </tr>
                         </tbody>
                     </table>
@@ -361,15 +408,15 @@
             <!-- Key Points -->
             <section id="element-keypoints" class="scroll-mt-24 pt-8 border-t border-slate-200">
                 <h3 class="text-2xl font-semibold text-slate-900 mb-4">Key Points</h3>
-                <p class="text-slate-600 mb-6">Can be rendered in two ways depending on the data structure: as stacked <strong>Numbered Cards</strong> (if array of strings) or a <strong>Compact Bulleted Box</strong> (if passed as a structured object). Spacing and line heights are computed dynamically based on the font size.</p>
+                <p class="text-slate-600 mb-6">Can be rendered in two ways depending on the data structure: as stacked <strong>Numbered Cards</strong> (if a flat array of strings) or a <strong>Highly Customizable List Container</strong> (if passed as a structured object). The structured format supports up to <strong>3 nested levels</strong>, customizable bullet styles per level, and custom indentation.</p>
                 
                 <!-- Properties Table -->
                 <div class="overflow-hidden rounded-xl border border-slate-200 shadow-sm mb-6">
                     <table class="min-w-full text-sm text-left bg-white">
                         <thead class="bg-slate-50 text-slate-500 font-medium border-b border-slate-200">
                             <tr>
-                                <th class="px-6 py-3">Property</th>
-                                <th class="px-6 py-3">Type</th>
+                                <th class="px-6 py-3 w-1/4">Property</th>
+                                <th class="px-6 py-3 w-1/6">Type</th>
                                 <th class="px-6 py-3">Description</th>
                             </tr>
                         </thead>
@@ -377,27 +424,49 @@
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">items</td>
                                 <td class="px-6 py-3 text-slate-500">Array</td>
-                                <td class="px-6 py-3">Array of strings, or objects with <code>{text: "..."}</code>.</td>
+                                <td class="px-6 py-3">
+                                    Array of strings, or <code>KeyPointItem</code> objects: <br/>
+                                    <code class="text-xs bg-slate-100 px-1 rounded">{ text, level, bulletType, bulletColor, children: [] }</code><br/>
+                                    Use <code>children</code> to nest items up to 3 levels deep, or explicitly set the <code>level</code> (0, 1, or 2).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">x, y, width</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Positioning and maximum width. Text will automatically wrap if it exceeds the <code>width</code>.</td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">title</td>
                                 <td class="px-6 py-3 text-slate-500">string</td>
-                                <td class="px-6 py-3">Optional header text for the bullet box.</td>
+                                <td class="px-6 py-3">Optional header text for the bullet box container.</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-3 font-mono text-brand-600">fontSize, color</td>
-                                <td class="px-6 py-3 text-slate-500">number/string</td>
-                                <td class="px-6 py-3">Applied to all bullet items (placed at root or in style).</td>
+                                <td class="px-6 py-3 font-mono text-brand-600 text-xs">fontSize, fontFamily, fontStyle, color, lineHeight</td>
+                                <td class="px-6 py-3 text-slate-500">mixed</td>
+                                <td class="px-6 py-3">Typography styling. Can be defined at the root or within the <code>style</code> object. Applies to all text.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.bulletType</td>
+                                <td class="px-6 py-3 text-slate-500">string | string[]</td>
+                                <td class="px-6 py-3">
+                                    Built-in: <code>'circle'</code>, <code>'square'</code>, <code>'diamond'</code>, <code>'dash'</code>, <code>'arrow'</code>, <code>'number'</code>, <code>'alpha'</code>, <code>'roman'</code>, <code>'none'</code>. Or provide a custom string (e.g., <code>'>'</code>).<br/>
+                                    <strong>Array format:</strong> Pass an array to define bullets per level (e.g., <code>['number', 'circle', 'dash']</code>).
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.bulletColor</td>
+                                <td class="px-6 py-3 text-slate-500">string | string[]</td>
+                                <td class="px-6 py-3">Hex color for the bullets. Like bulletType, this can be an array to color-code each nesting level differently.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.indent</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Horizontal indent spacing in pixels applied to each nested level. (Default: <code>44</code>).</td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">style.boxBackground</td>
                                 <td class="px-6 py-3 text-slate-500">string</td>
-                                <td class="px-6 py-3">Draws a colored rounded rectangle behind the list.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 font-mono text-brand-600">style.bulletColor</td>
-                                <td class="px-6 py-3 text-slate-500">string</td>
-                                <td class="px-6 py-3">Color of the circular bullet points.</td>
+                                <td class="px-6 py-3">Draws a colored rounded rectangle behind the list. Pairs with <code>style.borderRadius</code>.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -405,31 +474,43 @@
 
                 <div class="grid md:grid-cols-1 gap-6">
                     <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                        <h4 class="font-bold text-slate-900 mb-2">Detailed specification of key points</h4>
-                        <p class="text-sm text-slate-500 mb-4">Requires a structured object with an <code>items</code> array. Draws a background container.</p>
+                        <h4 class="font-bold text-slate-900 mb-2">Multi-Level Structured List</h4>
+                        <p class="text-sm text-slate-500 mb-4">Requires a structured object. Demonstrates nested children, per-level styling arrays, wrapping widths, and item-specific bullet overrides.</p>
                         <div class="bg-slate-900 rounded-xl p-4 overflow-x-auto code-container">
                             <button class="copy-btn absolute top-2 right-2 p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md" onclick="copySnippet(this, 'kp1')">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                             </button>
 <pre id="kp1" class="text-xs font-mono text-slate-300"><span class="text-blue-400">"keyPoints"</span>: {
-  <span class="text-blue-400">"x"</span>: <span class="text-orange-400">70</span>, <span class="text-blue-400">"y"</span>: <span class="text-orange-400">350</span>,
-  <span class="text-blue-400">"title"</span>: <span class="text-green-400">"Core Pillars"</span>,
+  <span class="text-blue-400">"x"</span>: <span class="text-orange-400">70</span>, <span class="text-blue-400">"y"</span>: <span class="text-orange-400">350</span>, <span class="text-blue-400">"width"</span>: <span class="text-orange-400">600</span>,
+  <span class="text-blue-400">"title"</span>: <span class="text-green-400">"Deployment Strategy"</span>,
   <span class="text-blue-400">"fontSize"</span>: <span class="text-orange-400">22</span>,
-  <span class="text-blue-400">"items"</span>: [
-    <span class="text-green-400">"Bullet point one"</span>,
-    <span class="text-green-400">"Bullet point two"</span>
-  ],
   <span class="text-blue-400">"style"</span>: {
-    <span class="text-blue-400">"bulletColor"</span>: <span class="text-green-400">"#E07A5F"</span>,
+    <span class="text-slate-500">// Level 1: Numbers, Level 2: Circles, Level 3: Dashes</span>
+    <span class="text-blue-400">"bulletType"</span>: [<span class="text-green-400">"number"</span>, <span class="text-green-400">"circle"</span>, <span class="text-green-400">"dash"</span>],
+    <span class="text-blue-400">"bulletColor"</span>: [<span class="text-green-400">"#E07A5F"</span>, <span class="text-green-400">"#8DAA91"</span>, <span class="text-green-400">"#CBD5E1"</span>],
+    <span class="text-blue-400">"indent"</span>: <span class="text-orange-400">40</span>,
     <span class="text-blue-400">"boxBackground"</span>: <span class="text-green-400">"#EDF4E0"</span>
-  }
+  },
+  <span class="text-blue-400">"items"</span>: [
+    {
+      <span class="text-blue-400">"text"</span>: <span class="text-green-400">"Phase 1: Foundation Setup"</span>,
+      <span class="text-blue-400">"children"</span>: [
+        { <span class="text-blue-400">"text"</span>: <span class="text-green-400">"Provision cloud infrastructure"</span> },
+        { 
+          <span class="text-blue-400">"text"</span>: <span class="text-green-400">"Critical: Verify IAM roles"</span>, 
+          <span class="text-blue-400">"bulletType"</span>: <span class="text-green-400">"arrow"</span> <span class="text-slate-500">// Overrides 'circle' for this specific item</span>
+        }
+      ]
+    },
+    <span class="text-green-400">"Phase 2: Gradual Rollout"</span>
+  ]
 }</pre>
                         </div>
                     </div>
                     
                     <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
-                        <h4 class="font-bold text-slate-900 mb-2">Simple listing of key points</h4>
-                        <p class="text-sm text-slate-500 mb-4">Pass an array directly. Draws individual dark slate numbered cards for each item.</p>
+                        <h4 class="font-bold text-slate-900 mb-2">Flat Array (Numbered Cards)</h4>
+                        <p class="text-sm text-slate-500 mb-4">Pass an array directly. Draws individual dark slate numbered cards for each item. Ideal for 3-4 high-level takeaways.</p>
                         <div class="bg-slate-900 rounded-xl p-4 overflow-x-auto code-container h-full">
                             <button class="copy-btn absolute top-2 right-2 p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md" onclick="copySnippet(this, 'kp2')">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
@@ -463,7 +544,7 @@
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">url / src</td>
                                 <td class="px-6 py-3 text-slate-500">string</td>
-                                <td class="px-6 py-3">Remote URL or local path to image (.png, .jpg, .webp).</td>
+                                <td class="px-6 py-3">Remote URL or local path to image (.png and .jpg only).</td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">x, y</td>
@@ -478,7 +559,17 @@
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">cornerRadius</td>
                                 <td class="px-6 py-3 text-slate-500">number</td>
-                                <td class="px-6 py-3">Rounds edges (can be placed at root or inside <code>style</code>).</td>
+                                <td class="px-6 py-3">Rounds edges (applied directly at the root).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.cornerRadius</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Alternative nested placement for rounding edges. Maps to the same effect as the root property.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.objectFit</td>
+                                <td class="px-6 py-3 text-slate-500">string</td>
+                                <td class="px-6 py-3">Usually set to <code>'cover'</code> to ensure the image scales to fill the bounding box cleanly without distortion.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -528,12 +619,12 @@
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">type</td>
                                 <td class="px-6 py-3 text-slate-500">string</td>
-                                <td class="px-6 py-3"><code>'Rect'</code>, <code>'Circle'</code>, <code>'Ellipse'</code>, or <code>'Line'</code>.</td>
+                                <td class="px-6 py-3"><code>'Rect'</code>, <code>'Circle'</code>, <code>'Line'</code>, <code>'Ellipse'</code>, <code>'RegularPolygon'</code>, or custom string.</td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">x, y</td>
                                 <td class="px-6 py-3 text-slate-500">number</td>
-                                <td class="px-6 py-3">Position. Center-point for Circles; Top-left for Rects.</td>
+                                <td class="px-6 py-3">Position. Center-point for Circles/Ellipses/Polygons; Top-left for Rects.</td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">width, height</td>
@@ -541,24 +632,49 @@
                                 <td class="px-6 py-3">Required for Rects.</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-3 font-mono text-brand-600">radius</td>
+                                <td class="px-6 py-3 font-mono text-brand-600">radius<br/><span class="text-xs text-slate-400">radiusX, radiusY</span></td>
                                 <td class="px-6 py-3 text-slate-500">number</td>
-                                <td class="px-6 py-3">Required for Circles (replaces width/height).</td>
+                                <td class="px-6 py-3"><code>radius</code> is required for Circles and RegularPolygons. <code>radiusX</code> and <code>radiusY</code> are required for Ellipses.</td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">points</td>
                                 <td class="px-6 py-3 text-slate-500">number[]</td>
-                                <td class="px-6 py-3">Required for Lines <code>[x1, y1, x2, y2]</code>.</td>
+                                <td class="px-6 py-3">Required for Lines: flat array of coordinates <code>[x1, y1, x2, y2, ...]</code>.</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-3 font-mono text-brand-600">fill / stroke</td>
-                                <td class="px-6 py-3 text-slate-500">string</td>
-                                <td class="px-6 py-3">Background color / Outline border color.</td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-3 font-mono text-brand-600">shadowBlur</td>
+                                <td class="px-6 py-3 font-mono text-brand-600">tension</td>
                                 <td class="px-6 py-3 text-slate-500">number</td>
-                                <td class="px-6 py-3">Drop shadow spread (pairs with <code>shadowColor</code>).</td>
+                                <td class="px-6 py-3">Curve tension for Lines (<code>0</code> for straight lines, <code>>0</code> for curves).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">fill / color</td>
+                                <td class="px-6 py-3 text-slate-500">string</td>
+                                <td class="px-6 py-3">Shape background color (hex). Both map to the fill attribute.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">stroke<br/><span class="text-xs text-slate-400">strokeWidth</span></td>
+                                <td class="px-6 py-3 text-slate-500">string / number</td>
+                                <td class="px-6 py-3">Outline border color (hex) and thickness in pixels.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">cornerRadius</td>
+                                <td class="px-6 py-3 text-slate-500">number / array</td>
+                                <td class="px-6 py-3">Rounds edges of a Rect. Can be a single number or an array <code>[tl, tr, br, bl]</code>.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">opacity</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Alpha transparency level from <code>0.0</code> (invisible) to <code>1.0</code> (solid).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">rotation</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Rotation angle in degrees.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">shadowColor<br/><span class="text-xs text-slate-400">shadowBlur, shadowOffset</span></td>
+                                <td class="px-6 py-3 text-slate-500">mixed</td>
+                                <td class="px-6 py-3">Drop shadow color (hex), blur radius (number), and offset (e.g., <code>{ x: 0, y: 4 }</code>).</td>
                             </tr>
                         </tbody>
                     </table>
@@ -620,14 +736,24 @@
                                 <td class="px-6 py-3">Top-left absolute positioning.</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-3 font-mono text-brand-600">width</td>
+                                <td class="px-6 py-3 font-mono text-brand-600">width, height</td>
                                 <td class="px-6 py-3 text-slate-500">number</td>
                                 <td class="px-6 py-3">Forces text wrapping if content exceeds width.</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-3 font-mono text-brand-600">fontSize, color</td>
+                                <td class="px-6 py-3 font-mono text-brand-600">fontSize, fontFamily, fontStyle</td>
                                 <td class="px-6 py-3 text-slate-500">number/string</td>
-                                <td class="px-6 py-3">Typography styles.</td>
+                                <td class="px-6 py-3">Typography styles (e.g., <code>20</code>, <code>"Arial"</code>, <code>"italic"</code>).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">color / fill</td>
+                                <td class="px-6 py-3 text-slate-500">string</td>
+                                <td class="px-6 py-3">Text color (hex code). Both keys map to the fill attribute.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">lineHeight</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Spacing multiplier between lines of wrapped text.</td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">align</td>
@@ -696,35 +822,69 @@
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">style.headerBackground</td>
                                 <td class="px-6 py-3 text-slate-500">string</td>
-                                <td class="px-6 py-3">Hex color for the top header row.</td>
+                                <td class="px-6 py-3">Hex color for the top header row background.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.headerTextColor</td>
+                                <td class="px-6 py-3 text-slate-500">string</td>
+                                <td class="px-6 py-3">Text color for the top header row.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.rowBackground</td>
+                                <td class="px-6 py-3 text-slate-500">string</td>
+                                <td class="px-6 py-3">Default hex background color for data rows.</td>
                             </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">style.alternateRowBackground</td>
                                 <td class="px-6 py-3 text-slate-500">string</td>
-                                <td class="px-6 py-3">Hex color for zebra-striping rows.</td>
+                                <td class="px-6 py-3">Hex color for zebra-striping alternate data rows.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.borderColor</td>
+                                <td class="px-6 py-3 text-slate-500">string</td>
+                                <td class="px-6 py-3">Color of the table's outer frame and inner cell dividers.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.fontSize</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Typography size for standard data cells.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.headerFontSize</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Typography size specifically for the header row.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.cellPadding</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Inner spacing between text and cell borders.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.cornerRadius</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Rounds the outer boundary corners of the entire table.</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div class="bg-slate-900 rounded-xl p-4 overflow-x-auto code-container shadow-lg">
+                <div class="bg-slate-900 rounded-xl p-4 overflow-x-auto code-container shadow-lg mb-6">
                     <button class="copy-btn absolute top-3 right-3 p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-md shadow-sm border border-slate-700" onclick="copySnippet(this, 'tableSnippet')">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                     </button>
 <pre id="tableSnippet" class="text-sm font-mono text-slate-300"><span class="text-blue-400">"table"</span>: {
-  <span class="text-blue-400">"x"</span>: <span class="text-orange-400">70</span>, <span class="text-blue-400">"y"</span>: <span class="text-orange-400">230</span>,
-  <span class="text-blue-400">"width"</span>: <span class="text-orange-400">1140</span>, <span class="text-blue-400">"height"</span>: <span class="text-orange-400">360</span>,
-  <span class="text-blue-400">"headers"</span>: [<span class="text-green-400">"Metric"</span>, <span class="text-green-400">"Q1 2026"</span>, <span class="text-green-400">"Q2 2026"</span>, <span class="text-green-400">"YoY Growth"</span>],
+  <span class="text-blue-400">"headers"</span>: [<span class="text-green-400">"Quarter"</span>, <span class="text-green-400">"Revenue"</span>, <span class="text-green-400">"Growth"</span>],
   <span class="text-blue-400">"rows"</span>: [
-    [<span class="text-green-400">"Revenue"</span>, <span class="text-green-400">"$1.2M"</span>, <span class="text-green-400">"$1.5M"</span>, <span class="text-green-400">"+25%"</span>],
-    [<span class="text-green-400">"Active Users"</span>, <span class="text-green-400">"45,000"</span>, <span class="text-green-400">"52,000"</span>, <span class="text-green-400">"+15%"</span>]
+    [<span class="text-green-400">"Q1 2026"</span>, <span class="text-green-400">"$1.2M"</span>, <span class="text-green-400">"+15%"</span>],
+    [<span class="text-green-400">"Q2 2026"</span>, <span class="text-green-400">"$1.5M"</span>, <span class="text-green-400">"+25%"</span>]
   ],
+  <span class="text-blue-400">"x"</span>: <span class="text-orange-400">70</span>, <span class="text-blue-400">"y"</span>: <span class="text-orange-400">220</span>,
+  <span class="text-blue-400">"width"</span>: <span class="text-orange-400">800</span>, <span class="text-blue-400">"height"</span>: <span class="text-orange-400">300</span>,
   <span class="text-blue-400">"style"</span>: {
-    <span class="text-blue-400">"headerBackground"</span>: <span class="text-green-400">"#0EA5E9"</span>,
-    <span class="text-blue-400">"headerTextColor"</span>: <span class="text-green-400">"#FFFFFF"</span>,
-    <span class="text-blue-400">"rowBackground"</span>: <span class="text-green-400">"#F8FAFC"</span>,
-    <span class="text-blue-400">"alternateRowBackground"</span>: <span class="text-green-400">"#EEF5FB"</span>,
-    <span class="text-blue-400">"borderColor"</span>: <span class="text-green-400">"#E2E8F0"</span>,
+    <span class="text-blue-400">"headerBackground"</span>: <span class="text-green-400">"#1E293B"</span>,
+    <span class="text-blue-400">"headerTextColor"</span>: <span class="text-green-400">"#F8FAFC"</span>,
+    <span class="text-blue-400">"rowBackground"</span>: <span class="text-green-400">"#FFFFFF"</span>,
+    <span class="text-blue-400">"alternateRowBackground"</span>: <span class="text-green-400">"#F1F5F9"</span>,
     <span class="text-blue-400">"cornerRadius"</span>: <span class="text-orange-400">8</span>
   }
 }</pre>
@@ -734,7 +894,7 @@
             <!-- Code Blocks -->
             <section id="element-codeblocks" class="scroll-mt-24 pt-8 border-t border-slate-200">
                 <h3 class="text-2xl font-semibold text-slate-900 mb-4">Code Blocks (<code class="text-brand-600 text-lg">codeBlock</code>)</h3>
-                <p class="text-slate-600 mb-6">Renders a beautifully styled, rounded editor background box with monospace text inside. Perfect for technical presentations or software architecture slides.</p>
+                <p class="text-slate-600 mb-6">Draws a rounded, padded editor background box layered with wrapped monospace syntax text. Ideal for technical presentations.</p>
                 
                 <!-- Properties Table -->
                 <div class="overflow-hidden rounded-xl border border-slate-200 shadow-sm mb-6">
@@ -747,6 +907,11 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100">
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">language</td>
+                                <td class="px-6 py-3 text-slate-500">string</td>
+                                <td class="px-6 py-3">Identifier for syntax processing (e.g., <code>'javascript'</code>, <code>'python'</code>).</td>
+                            </tr>
                             <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">code</td>
                                 <td class="px-6 py-3 text-slate-500">string</td>
@@ -768,9 +933,24 @@
                                 <td class="px-6 py-3">Code font color (defaults to light gray).</td>
                             </tr>
                             <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.fontFamily</td>
+                                <td class="px-6 py-3 text-slate-500">string</td>
+                                <td class="px-6 py-3">Typography for the code block (e.g., <code>"Consolas"</code>, <code>"monospace"</code>).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.fontSize</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Typography size for the code text.</td>
+                            </tr>
+                            <tr>
                                 <td class="px-6 py-3 font-mono text-brand-600">style.padding</td>
                                 <td class="px-6 py-3 text-slate-500">number</td>
-                                <td class="px-6 py-3">Inner text inset (defaults to 24px).</td>
+                                <td class="px-6 py-3">Inner text inset from the background borders (defaults to <code>24</code>).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">style.cornerRadius</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Rounds the corners of the editor background box.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -825,9 +1005,24 @@
                                 <td class="px-6 py-3">Defaults to bottom-left layout (<code>x: 140, y: height-60</code>).</td>
                             </tr>
                             <tr>
-                                <td class="px-6 py-3 font-mono text-brand-600">fontSize, color</td>
+                                <td class="px-6 py-3 font-mono text-brand-600">width, height</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Forces text wrapping if content exceeds width.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">fontSize, fontFamily, fontStyle</td>
                                 <td class="px-6 py-3 text-slate-500">number/string</td>
-                                <td class="px-6 py-3">Typography styles.</td>
+                                <td class="px-6 py-3">Typography styles (e.g., <code>16</code>, <code>"Arial"</code>, <code>"normal"</code>).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">color / fill</td>
+                                <td class="px-6 py-3 text-slate-500">string</td>
+                                <td class="px-6 py-3">Text color (hex code).</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 font-mono text-brand-600">lineHeight</td>
+                                <td class="px-6 py-3 text-slate-500">number</td>
+                                <td class="px-6 py-3">Spacing multiplier between lines of text.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1354,6 +1549,93 @@
     "text": "Backend Engineering Patterns 2026",
     "x": 70, "y": 660,
     "fontSize": 14, "color": "#52525B"
+  }
+}
+</pre>
+                    </div>
+                </div>
+
+                <!-- Template 7: Multi-Level List Layout -->
+                <div id="sample-multi-level" class="scroll-mt-24 mb-16 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-50/50">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">Deep Hierarchy: Multi-Level List</h3>
+                            <p class="text-sm text-slate-500 mt-1">Demonstrates 3-level deep nested Key Points utilizing the full width of the slide. Features an array of bullet types and colors to differentiate nesting depths, plus a targeted override.</p>
+                        </div>
+                        <button class="shrink-0 flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-lg shadow-sm transition-colors" onclick="copySnippet(this, 'jsonTemplate7')">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            Copy JSON
+                        </button>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <img src="sample007.png">
+                    </div>
+                    <div class="p-6 bg-slate-900 overflow-x-auto">
+<pre id="jsonTemplate7" class="text-sm font-mono text-slate-300">
+{
+  "width": 1280,
+  "height": 720,
+  "background": "#F4F4F5",
+  "theme": {
+    "primaryColor": "#3F6212",
+    "textColor": "#27272A",
+    "accentColor": "#65A30D"
+  },
+  "title": {
+    "text": "Go-To-Market Execution Plan",
+    "x": 70, "y": 60, "width": 1140,
+    "fontSize": 48, "color": "#18181B", "fontStyle": "bold"
+  },
+  "description": {
+    "text": "A comprehensive breakdown of our phased rollout strategy, detailing core initiatives, sub-tasks, and specific action items across all global teams.",
+    "x": 70, "y": 130, "width": 1000,
+    "fontSize": 24, "color": "#52525B", "lineHeight": 1.4
+  },
+  "keyPoints": {
+    "x": 70, "y": 230,
+    "width": 1140,
+    "title": "Phased Rollout Hierarchy",
+    "style": {
+      "bulletType": ["number", "circle", "dash"],
+      "bulletColor": ["#4D7C0F", "#D97706", "#71717A"],
+      "indent": 48,
+      "fontSize": 22,
+      "boxBackground": "#FFFFFF",
+      "borderRadius": 16,
+      "lineHeight": 1.4
+    },
+    "items": [
+      {
+        "text": "Phase 1: Infrastructure & Beta Testing",
+        "children": [
+          {
+            "text": "Deploy isolated staging environments for regional nodes",
+            "children": [
+              { "text": "Provision AWS EC2 clusters in US-East and EU-West" },
+              { "text": "Validate IAM security policies against compliance matrices" }
+            ]
+          },
+          {
+            "text": "Initiate closed beta with early-access partners",
+            "bulletType": "arrow",
+            "bulletColor": "#0284C7"
+          }
+        ]
+      },
+      {
+        "text": "Phase 2: Global Marketing Sync",
+        "children": [
+          { "text": "Distribute localization assets to regional campaign managers" },
+          { "text": "Activate targeted ad-spend across primary social channels" }
+        ]
+      }
+    ]
+  },
+  "footer": {
+    "text": "GTM Strategy Deck 2026",
+    "x": 70, "y": 660,
+    "fontSize": 14,
+    "color": "#A1A1AA"
   }
 }
 </pre>
