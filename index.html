@@ -123,6 +123,7 @@
                     <li><a href="#sample-decorative-shapes" class="nav-link block px-2 py-1.5 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm text-brand-400">Decorative Shapes</a></li>
                     <li><a href="#sample-code-snippet" class="nav-link block px-2 py-1.5 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm text-brand-400">Code Snippets Layout</a></li>
                     <li><a href="#sample-multi-level" class="nav-link block px-2 py-1.5 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm text-brand-400">Multi-Level Hierarchy</a></li>
+                    <li><a href="#sample-multi-row-points" class="nav-link block px-2 py-1.5 rounded-md hover:bg-slate-800 hover:text-white transition-colors text-sm text-brand-400">Key points with multi-row points</a></li>
                 </ul>
             </div>
         </nav>
@@ -450,7 +451,7 @@
                                 <td class="px-6 py-3 font-mono text-brand-600">perPointMinHeight</td>
                                 <td class="px-6 py-3 text-slate-500">number</td>
                                 <td class="px-6 py-3">
-                                    In pixels. Note that the min value for perPointMinHeight is 45 (i.e. the renderer will default to 45 if perPointMinHeight is less than 45).</code>).
+                                    In pixels. Note that the min value for perPointMinHeight is 45 (i.e. the renderer will default to 45 if perPointMinHeight is less than 45).
                                 </td>
                             </tr>
                             <tr>
@@ -1335,7 +1336,7 @@
                             <p class="text-sm text-slate-500 mt-1">Utilizes the images array to construct a 3-image mosaic (Hero Top + 2 Split Bottom) with logo branding.</p>
                         </div>
                         <button class="shrink-0 flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-lg shadow-sm transition-colors" onclick="copySnippet(this, 'jsonTemplate4')">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
                             Copy JSON
                         </button>
                     </div>
@@ -1649,6 +1650,83 @@
 </pre>
                     </div>
                 </div>
+
+                <!-- Template 8: Key Points with Multi-Row Points -->
+                <div id="sample-multi-row-points" class="scroll-mt-24 mb-16 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-200 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-slate-50/50">
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">Key Points with Multi-Row Points</h3>
+                            <p class="text-sm text-slate-500 mt-1">Demonstrates key points with extended text that automatically wraps into multiple rows using specific indentation and styling parameters.</p>
+                        </div>
+                        <button class="shrink-0 flex items-center gap-2 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white font-medium rounded-lg shadow-sm transition-colors" onclick="copySnippet(this, 'jsonTemplate8')">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            Copy JSON
+                        </button>
+                    </div>
+                    <div class="p-6 bg-white">
+                        <img src="sample008.png" alt="Multi-row points preview">
+                    </div>
+                    <div class="p-6 bg-slate-900 overflow-x-auto">
+<pre id="jsonTemplate8" class="text-sm font-mono text-slate-300">
+{
+  "width": 1280,
+  "height": 720,
+  "background": "#F4F4F5",
+  "theme": {
+    "primaryColor": "#3F6212",
+    "textColor": "#27272A",
+    "accentColor": "#65A30D"
+  },
+  "title": {
+    "text": "Go-To-Market Execution Plan",
+    "x": 70, "y": 60, "width": 1140,
+    "fontSize": 48, "color": "#18181B", "fontStyle": "bold"
+  },
+  "description": {
+    "text": "A comprehensive breakdown of our phased rollout strategy, detailing core initiatives, sub-tasks, and specific action items across all global teams.",
+    "x": 70, "y": 130, "width": 1000,
+    "fontSize": 24, "color": "#52525B", "lineHeight": 1.4
+  },
+  "keyPoints": {
+    "x": 70, "y": 230,
+    "width": 1140,
+    "title": "Phased Rollout Hierarchy",
+    "style": {
+      "bulletType": ["number", "circle", "dash"],
+      "bulletColor": ["#4D7C0F", "#D97706", "#71717A"],
+      "indent": 48,
+      "fontSize": 22,
+      "boxBackground": "#FFFFFF",
+      "borderRadius": 16,
+      "lineHeight": 1.4,
+      "perPointMinHeight": 70
+    },
+    "items": [
+      {
+        "text": "Phase 1: Infrastructure & Beta Testing. Establish core technology infrastructure and validate the product through controlled beta testing."
+      },
+      {
+        "text": "Phase 2: Market Launch & Enablement. Launch in priority markets and equip sales, marketing, and support teams for successful adoption. We may explore the Latin American markets initially, followed by Europe, Africa, Asia and North America."
+      },
+      {
+        "text": "Phase 3: Expansion & Optimization. Scale into additional markets while optimizing campaigns, operations, and customer experience."
+      },
+      {
+        "text": "Phase 4: Growth & Continuous Improvement. Accelerate customer acquisition and continuously improve the offering using data and customer feedback."
+      }
+    ]
+  },
+  "footer": {
+    "text": "GTM Strategy Deck 2026",
+    "x": 70, "y": 660,
+    "fontSize": 14,
+    "color": "#A1A1AA"
+  }
+}
+</pre>
+                    </div>
+                </div>
+
             </section>
         </div>
     </main>
